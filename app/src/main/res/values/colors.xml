@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#000000</color>
+
+    <color name="brandGreenFal">#697c37</color>
+    <color name="brandGreen">#98ab63</color>
+    <color name="brandGreenDark">#3c500b</color>
+    <color name="brandGreenFood">#ccda46</color>
+    <color name="brandGreenFoodLight">#ffff79</color>
+    <color name="brandGreenNature">#98a900</color>
+
+    <color name="brandOrange">#fe9801</color>
+    <color name="brandOrangeDark">#c56900</color>
+    <color name="brandBeige">#f4eec7</color>
+    <color name="brandBeigeDark">#c1bc96</color>
+</resources>
