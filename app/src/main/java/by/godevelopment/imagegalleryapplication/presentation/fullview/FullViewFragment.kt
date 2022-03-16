@@ -69,7 +69,9 @@ class FullViewFragment : Fragment() {
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        binding.progress.visibility = View.GONE
+                        _binding?.let {
+                            it.progress.visibility = View.GONE
+                        }
                         return false
                     }
                 })
