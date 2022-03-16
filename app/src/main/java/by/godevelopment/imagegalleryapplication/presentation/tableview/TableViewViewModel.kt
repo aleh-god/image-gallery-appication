@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.imagegalleryapplication.R
 import by.godevelopment.imagegalleryapplication.commons.TAG
-import by.godevelopment.imagegalleryapplication.data.TestDataSource
 import by.godevelopment.imagegalleryapplication.domain.FetchImagesListUseCase
 import by.godevelopment.imagegalleryapplication.domain.StringHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,14 +18,13 @@ class TableViewViewModel @Inject constructor(
     private val fetchImagesListUseCase: FetchImagesListUseCase,
     private val stringHelper: StringHelper
 ): ViewModel() {
-    private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState
+    private val _uiState: MutableStateFlow<UiState?> = MutableStateFlow(null)
+    val uiState: StateFlow<UiState?> = _uiState
 
     private val _uiEvent  = MutableSharedFlow<String>(0)
     val uiEvent: SharedFlow<String> = _uiEvent
 
     init {
-        Log.i(TAG, "TableViewViewModel: init")
         fetchImagesList()
     }
 
@@ -48,7 +46,8 @@ class TableViewViewModel @Inject constructor(
                     _uiEvent.emit(stringHelper.getString(R.string.alert_error_loading))
                 }
                 .collect {
-                    Log.i(TAG, "viewModelScope.launch: .collect")
+                    Log.i(TAG, "viewModelScope.launch: .collect = ${it.size}")
+                    _uiState.value = null
                     _uiState.value = UiState(
                         isFetchingData = false,
                         imagesList = it

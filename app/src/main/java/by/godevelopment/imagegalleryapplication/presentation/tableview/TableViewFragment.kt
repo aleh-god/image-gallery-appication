@@ -45,38 +45,43 @@ class TableViewFragment : Fragment() {
 
     private fun setupUi() {
         lifecycleScope.launchWhenStarted {
+            Log.i(TAG, "setupUi: lifecycleScope.launchWhenStarted")
             viewModel.uiState.collect { uiState ->
-                Log.i(TAG, "setupUi: launchWhenStarted isFetchingData = ${uiState.isFetchingData}")
-                val swipeContainer = binding.swipeContainer
-                if (!uiState.isFetchingData) {
-                    Log.i(TAG, "setupUi: uiState.isFetchingData = false")
-                    binding.progress.visibility = View.GONE
-                    swipeContainer?.isRefreshing = false
-                }
-                    else binding.progress.visibility = View.VISIBLE
-                val adapter = TableAdapter(onClick).apply {
-                    Log.i(TAG, "setupUi: TableAdapter = ${uiState.imagesList.size}")
-                    imagesList = uiState.imagesList
-                }
-                binding.rv.adapter = adapter
-                val layoutManager =
-                    if (isTablet()) GridLayoutManager(requireContext(), 3)
-                        else GridLayoutManager(requireContext(), 2)
-                binding.rv.layoutManager = layoutManager
+                uiState?.let {
+                    Log.i(TAG, "setupUi: launchWhenStarted Data = ${uiState.imagesList.size}")
+                    val swipeContainer = binding.swipeContainer
 
-                binding.swipeContainer?.apply {
-                    Log.i(TAG, "setupUi: binding.swipeContainer?.apply")
-                    setOnRefreshListener {
-                        Log.i(TAG, "setupUi: binding.swipeContainer emptyList() and fetchImagesList()")
-                        (binding.rv.adapter as TableAdapter).imagesList = emptyList()
-                        viewModel.fetchImagesList()
+                    if (!uiState.isFetchingData) {
+                        Log.i(TAG, "setupUi: uiState.isFetchingData = false")
+                        binding.progress.visibility = View.GONE
+                        swipeContainer?.isRefreshing = false
+                    } else binding.progress.visibility = View.VISIBLE
+
+                    val adapter = TableAdapter(onClick).apply {
+                        imagesList = uiState.imagesList
                     }
-                    setColorSchemeResources(
-                        android.R.color.holo_blue_bright,
-                        android.R.color.holo_green_light,
-                        android.R.color.holo_orange_light,
-                        android.R.color.holo_red_light
-                    )
+                    binding.rv.adapter = adapter
+                    val layoutManager =
+                        if (isTablet()) GridLayoutManager(requireContext(), 3)
+                        else GridLayoutManager(requireContext(), 2)
+                    binding.rv.layoutManager = layoutManager
+
+                    binding.swipeContainer?.apply {
+                        setOnRefreshListener {
+                            Log.i(
+                                TAG,
+                                "setupUi: setOnRefreshListener emptyList() and fetchImagesList()"
+                            )
+                            (binding.rv.adapter as TableAdapter).imagesList = emptyList()
+                            viewModel.fetchImagesList()
+                        }
+                        setColorSchemeResources(
+                            android.R.color.holo_blue_bright,
+                            android.R.color.holo_green_light,
+                            android.R.color.holo_orange_light,
+                            android.R.color.holo_red_light
+                        )
+                    }
                 }
             }
         }
