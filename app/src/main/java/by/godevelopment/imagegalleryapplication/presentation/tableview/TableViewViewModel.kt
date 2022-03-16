@@ -27,10 +27,6 @@ class TableViewViewModel @Inject constructor(
 
     init {
         Log.i(TAG, "TableViewViewModel: init")
-        _uiState.value = UiState(
-            isFetchingData = false,
-            imagesList = TestDataSource.imagesList
-        )
         fetchImagesList()
     }
 
@@ -44,7 +40,7 @@ class TableViewViewModel @Inject constructor(
                     )
                 }
                 .catch { exception ->
-                    Log.i(TAG, "TableViewViewModel: ${exception.message}")
+                    Log.i(TAG, "TableViewViewModel: .catch ${exception.message}")
                     _uiState.value = UiState(
                         isFetchingData = false
                     )
