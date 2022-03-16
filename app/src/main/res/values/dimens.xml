@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="item_rv_dimension">200dp</dimen>
+    <dimen name="main_elevation">5dp</dimen>
+    <dimen name="main_padding">3dp</dimen>
+</resources>

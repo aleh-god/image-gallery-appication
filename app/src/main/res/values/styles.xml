@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <style name="Widget.ImageGalleryApp.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:elevation">@dimen/main_elevation</item>
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+    </style>
 </resources>
