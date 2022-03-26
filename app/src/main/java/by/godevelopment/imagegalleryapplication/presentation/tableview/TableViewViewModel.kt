@@ -8,6 +8,7 @@ import by.godevelopment.imagegalleryapplication.commons.TAG
 import by.godevelopment.imagegalleryapplication.domain.FetchImagesListUseCase
 import by.godevelopment.imagegalleryapplication.domain.StringHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -18,22 +19,25 @@ class TableViewViewModel @Inject constructor(
     private val fetchImagesListUseCase: FetchImagesListUseCase,
     private val stringHelper: StringHelper
 ): ViewModel() {
-    private val _uiState: MutableStateFlow<UiState?> = MutableStateFlow(null)
-    val uiState: StateFlow<UiState?> = _uiState
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState
 
     private val _uiEvent  = MutableSharedFlow<String>(0)
     val uiEvent: SharedFlow<String> = _uiEvent
+
+    private var fetchJob: Job? = null
 
     init {
         fetchImagesList()
     }
 
     fun fetchImagesList() {
-        viewModelScope.launch {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
             fetchImagesListUseCase()
                 .onStart {
                     Log.i(TAG, "viewModelScope.launch: .onStart")
-                    UiState(
+                    _uiState.value = UiState(
                         isFetchingData = true
                     )
                 }
@@ -47,7 +51,6 @@ class TableViewViewModel @Inject constructor(
                 }
                 .collect {
                     Log.i(TAG, "viewModelScope.launch: .collect = ${it.size}")
-                    _uiState.value = null
                     _uiState.value = UiState(
                         isFetchingData = false,
                         imagesList = it

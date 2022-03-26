@@ -47,10 +47,8 @@ class TableViewFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             Log.i(TAG, "setupUi: lifecycleScope.launchWhenStarted")
             viewModel.uiState.collect { uiState ->
-                uiState?.let {
                     Log.i(TAG, "setupUi: launchWhenStarted Data = ${uiState.imagesList.size}")
                     val swipeContainer = binding.swipeContainer
-
                     if (!uiState.isFetchingData) {
                         Log.i(TAG, "setupUi: uiState.isFetchingData = false")
                         binding.progress.visibility = View.GONE
@@ -82,7 +80,6 @@ class TableViewFragment : Fragment() {
                             android.R.color.holo_red_light
                         )
                     }
-                }
             }
         }
     }

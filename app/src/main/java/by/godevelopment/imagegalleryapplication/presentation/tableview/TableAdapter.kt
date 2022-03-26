@@ -43,7 +43,7 @@ class TableAdapter(
             val src = imagesList[position]
             Glide.with(root)
                 .load(src)
-                .fitCenter()
+                .centerCrop() //.fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .error(R.drawable.image_not_loaded)
                 .placeholder(R.drawable.image)
