@@ -45,31 +45,22 @@ class TableViewFragment : Fragment() {
 
     private fun setupUi() {
         lifecycleScope.launchWhenStarted {
-            Log.i(TAG, "setupUi: lifecycleScope.launchWhenStarted")
+            val adapter = TableAdapter(onClick)
+            binding.rv.adapter = adapter
+            val layoutManager =
+                if (isTablet()) GridLayoutManager(requireContext(), 3)
+                else GridLayoutManager(requireContext(), 2)
+            binding.rv.layoutManager = layoutManager
+
             viewModel.uiState.collect { uiState ->
-                    Log.i(TAG, "setupUi: launchWhenStarted Data = ${uiState.imagesList.size}")
                     val swipeContainer = binding.swipeContainer
                     if (!uiState.isFetchingData) {
-                        Log.i(TAG, "setupUi: uiState.isFetchingData = false")
                         binding.progress.visibility = View.GONE
                         swipeContainer?.isRefreshing = false
                     } else binding.progress.visibility = View.VISIBLE
-
-                    val adapter = TableAdapter(onClick).apply {
-                        imagesList = uiState.imagesList
-                    }
-                    binding.rv.adapter = adapter
-                    val layoutManager =
-                        if (isTablet()) GridLayoutManager(requireContext(), 3)
-                        else GridLayoutManager(requireContext(), 2)
-                    binding.rv.layoutManager = layoutManager
-
+                    adapter.imagesList = uiState.imagesList
                     binding.swipeContainer?.apply {
                         setOnRefreshListener {
-                            Log.i(
-                                TAG,
-                                "setupUi: setOnRefreshListener emptyList() and fetchImagesList()"
-                            )
                             (binding.rv.adapter as TableAdapter).imagesList = emptyList()
                             viewModel.fetchImagesList()
                         }
